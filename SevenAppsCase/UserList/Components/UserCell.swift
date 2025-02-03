@@ -56,12 +56,12 @@ class UserCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
         changeContainerViewBorder(selected: selected)
     }
-
+    
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         super.setHighlighted(highlighted, animated: animated)
         changeContainerViewBorder(selected: highlighted)
     }
-
+    
     private func changeContainerViewBorder(selected: Bool) {
         if selected {
             cardView.layer.borderColor = UIColor.primaryDark.cgColor
@@ -121,18 +121,18 @@ class UserCell: UITableViewCell {
         mailLabel.text = user.email
         
         if let url = URL(string: user.avatarURL) {
-                    DispatchQueue.global().async {
-                        if let data = try? Data(contentsOf: url) {
-                            DispatchQueue.main.async {
-                                self.profileImageView.image = UIImage(data: data)
-                                self.profileImageView.layer.cornerRadius = self.profileImageView.frame.height / 2
-                                self.profileImageView.clipsToBounds = true
-                                self.profileImageView.tintColor = .primaryDarker
-                            }
-                        }
+            DispatchQueue.global().async {
+                if let data = try? Data(contentsOf: url) {
+                    DispatchQueue.main.async {
+                        self.profileImageView.image = UIImage(data: data)
+                        self.profileImageView.layer.cornerRadius = self.profileImageView.frame.height / 2
+                        self.profileImageView.clipsToBounds = true
+                        self.profileImageView.tintColor = .primaryDarker
                     }
                 }
+            }
+        }
     }
-
+    
 }
 
