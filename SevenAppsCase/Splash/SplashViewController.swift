@@ -12,18 +12,20 @@ class SplashViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            self.showUserListScreen()
+        }
     }
 
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    func showUserListScreen() {
+        // UserListScreen.xib dosyasını yükle
+        let userListViewController = UserListViewController(nibName: "UserListScreen", bundle: nil)
+        let navigationController = CustomNavigationController(rootViewController: userListViewController)
+        
+        // Yeni ViewController'ı ana window'a geçirilir
+        if let window = self.view.window {
+            window.rootViewController = navigationController
+            window.makeKeyAndVisible()
+        }
     }
-    */
-
 }
