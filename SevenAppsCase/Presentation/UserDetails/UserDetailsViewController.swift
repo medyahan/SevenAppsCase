@@ -79,203 +79,22 @@ class UserDetailsViewController: UIViewController {
     private func configureContent() {
         guard let user = viewModel.user else { return }
         
-        contentStackView.addArrangedSubview(createUserInfoView(user: user))
-        contentStackView.addArrangedSubview(createAddressView(address: user.address))
-        contentStackView.addArrangedSubview(createCompanyView(company: user.company))
-    }
-    
-    private func createUserInfoView(user: User) -> UIView {
-        let container = UIView()
-        container.applyCardStyle()
+        let userInfoView = UserInfoView()
+            userInfoView.configure(with: user)
         
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.spacing = 16
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        container.addSubview(stackView)
-        
-        NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: container.topAnchor, constant: 16),
-            stackView.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 16),
-            stackView.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -16),
-            stackView.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -16)
-        ])
-        
-        let profileStackView = UIStackView()
-        profileStackView.axis = .horizontal
-        profileStackView.spacing = 16
-        profileStackView.alignment = .center
-        
-        let profileImageView = UIImageView()
-        profileImageView.applyAvatarStyle()
-        profileImageView.contentMode = .scaleAspectFill
-        profileImageView.clipsToBounds = true
-        profileImageView.layer.cornerRadius = 40
-        
-        NSLayoutConstraint.activate([
-            profileImageView.widthAnchor.constraint(equalToConstant: 80),
-            profileImageView.heightAnchor.constraint(equalToConstant: 80)
-        ])
-        
-        // Asenkron Avatar Yükleme
-        profileImageView.loadImage(from: user.avatarURL)
-        
-        let nameUsernameStack = UIStackView()
-        nameUsernameStack.axis = .vertical
-        nameUsernameStack.spacing = 4
-        
-        let nameLabel = createLabel(text: user.name, isTitle: true)
-        let usernameLabel = createLabel(text: "@\(user.username)")
-        
-        nameUsernameStack.addArrangedSubview(nameLabel)
-        nameUsernameStack.addArrangedSubview(usernameLabel)
-        
-        profileStackView.addArrangedSubview(profileImageView)
-        profileStackView.addArrangedSubview(nameUsernameStack)
-        
-        stackView.addArrangedSubview(profileStackView)
-        stackView.addArrangedSubview(createDivider())
-        
-        stackView.addArrangedSubview(createIconTextRow(icon: "mail", text: user.email.lowercased()))
-        stackView.addArrangedSubview(createIconTextRow(icon: "call", text: user.phone))
-        stackView.addArrangedSubview(createIconTextRow(icon: "discover", text: user.website.lowercased()))
-        
-        return container
-    }
-    
-    private func createAddressView(address: Address) -> UIView {
-        let container = UIView()
-        container.applyCardStyle()
-        
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.spacing = 12
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        container.addSubview(stackView)
-        
-        NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: container.topAnchor, constant: 16),
-            stackView.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 16),
-            stackView.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -16),
-            stackView.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -16)
-        ])
-        
-        let titleStack = UIStackView()
-        titleStack.axis = .horizontal
-        titleStack.spacing = 8
-        titleStack.alignment = .center
-        
-        let iconImageView = UIImageView(image: UIImage(named: "location")?.withRenderingMode(.alwaysTemplate))
-        iconImageView.tintColor = .secondary
-        iconImageView.contentMode = .scaleAspectFit
-        NSLayoutConstraint.activate([
-            iconImageView.widthAnchor.constraint(equalToConstant: 20),
-            iconImageView.heightAnchor.constraint(equalToConstant: 20)
-        ])
-        
-        let titleLabel = createLabel(text: "Address", isSubTitle: true)
-        titleStack.addArrangedSubview(iconImageView)
-        titleStack.addArrangedSubview(titleLabel)
-        
-        stackView.addArrangedSubview(titleStack)
-        stackView.addArrangedSubview(createDivider())
-        
-        stackView.addArrangedSubview(createLabel(text: "• Street: \(address.street)"))
-        stackView.addArrangedSubview(createLabel(text: "• Suite: \(address.suite)"))
-        stackView.addArrangedSubview(createLabel(text: "• City: \(address.city)"))
-        stackView.addArrangedSubview(createLabel(text: "• Zipcode: \(address.zipcode)"))
-        
-        return container
-    }
-    
-    private func createCompanyView(company: Company) -> UIView {
-        let container = UIView()
-        container.applyCardStyle()
-        
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.spacing = 12
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        container.addSubview(stackView)
-        
-        NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: container.topAnchor, constant: 16),
-            stackView.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 16),
-            stackView.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -16),
-            stackView.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -16)
-        ])
-        
-        let titleStack = UIStackView()
-        titleStack.axis = .horizontal
-        titleStack.spacing = 8
-        titleStack.alignment = .center
-        
-        let iconImageView = UIImageView(image: UIImage(named: "work")?.withRenderingMode(.alwaysTemplate))
-        iconImageView.tintColor = .secondary
-        iconImageView.contentMode = .scaleAspectFit
-        NSLayoutConstraint.activate([
-            iconImageView.widthAnchor.constraint(equalToConstant: 20),
-            iconImageView.heightAnchor.constraint(equalToConstant: 20)
-        ])
-        
-        let titleLabel = createLabel(text: "Company", isSubTitle: true)
-        titleStack.addArrangedSubview(iconImageView)
-        titleStack.addArrangedSubview(titleLabel)
-        
-        stackView.addArrangedSubview(titleStack)
-        stackView.addArrangedSubview(createDivider())
-        
-        stackView.addArrangedSubview(createLabel(text: "• Name: \(company.name)"))
-        stackView.addArrangedSubview(createLabel(text: "• Catchphrase: \(company.catchPhrase)"))
-        stackView.addArrangedSubview(createLabel(text: "• Business: \(company.bs)"))
-        
-        return container
-    }
-    
-    
-    private func createDivider() -> UIView {
-        let divider = UIView()
-        divider.applyDividerStyle()
-        NSLayoutConstraint.activate([
-            divider.heightAnchor.constraint(equalToConstant: 1)
-        ])
-        return divider
-    }
-    
-    private func createIconTextRow(icon: String, text: String) -> UIStackView {
-        let rowStack = UIStackView()
-        rowStack.axis = .horizontal
-        rowStack.spacing = 8
-        rowStack.alignment = .center
-        
-        let iconImageView = UIImageView(image: UIImage(named: icon)?.withRenderingMode(.alwaysTemplate))
-        iconImageView.contentMode = .scaleAspectFit
-        iconImageView.tintColor = .neutral
-        iconImageView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            iconImageView.widthAnchor.constraint(equalToConstant: 20),
-            iconImageView.heightAnchor.constraint(equalToConstant: 20)
-        ])
-        
-        let textLabel = createLabel(text: text)
-        
-        rowStack.addArrangedSubview(iconImageView)
-        rowStack.addArrangedSubview(textLabel)
-        
-        return rowStack
-    }
-    
-    private func createLabel(text: String, isSubTitle: Bool = false, isTitle: Bool = false) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        if isSubTitle {
-            label.applySubTitleStyle()
-        } else if isTitle {
-            label.applyTitleStyle()
-        } else {
-            label.applyDetailsDescriptionStyle()
-        }
-        return label
+        contentStackView.addArrangedSubview(userInfoView)
+        contentStackView.addArrangedSubview(UserDetailView(title: "Address", details: [
+            "Street: \(user.address.street)",
+            "Suite: \(user.address.suite)",
+            "City: \(user.address.city)",
+            "Zipcode: \(user.address.zipcode)"
+        ], icon: "location"))
+
+        contentStackView.addArrangedSubview(UserDetailView(title: "Company", details: [
+            "Name: \(user.company.name)",
+            "Catchphrase: \(user.company.catchPhrase)",
+            "Business: \(user.company.bs)"
+        ], icon: "work"))
     }
     
     // MARK: - Error & Empty States

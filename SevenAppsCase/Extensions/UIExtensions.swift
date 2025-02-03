@@ -72,10 +72,10 @@ extension UIImageView {
         }
     }
     
-    func applyAvatarStyle() {
+    func applyAvatarStyle(size: Int) {
         self.contentMode = .scaleAspectFill
         self.clipsToBounds = true
-        self.layer.cornerRadius = 25
+        self.layer.cornerRadius = CGFloat(size / 2)
         self.translatesAutoresizingMaskIntoConstraints = false
     }
 }

@@ -17,7 +17,7 @@ class UserCell: UITableViewCell {
     
     private lazy var profileImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.applyAvatarStyle()
+        imageView.applyAvatarStyle(size: 50)
         return imageView
     }()
     
@@ -116,8 +116,6 @@ class UserCell: UITableViewCell {
         mailLabel.text = user.email.lowercased()
         
         profileImageView.loadImage(from: user.avatarURL)
-        profileImageView.layer.cornerRadius = self.profileImageView.frame.height / 2
-        profileImageView.clipsToBounds = true
     }
     
 }
