@@ -9,6 +9,10 @@ import UIKit
 
 class UserListViewController: UIViewController {
     
+    private struct Constants {
+        static let resultText = "Results Found"
+    }
+    
     // MARK: UI Elements
     @IBOutlet weak var tableView: UITableView!
     
@@ -29,7 +33,16 @@ class UserListViewController: UIViewController {
     }()
     
     // MARK: Properties
-    private let viewModel = UserListViewModel()
+    private let viewModel: UserListViewModel
+    
+    init(viewModel: UserListViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: "UserListScreen", bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: Lifecycle
     override func viewDidLoad() {
@@ -65,7 +78,7 @@ class UserListViewController: UIViewController {
             resultsLabel.trailingAnchor.constraint(equalTo: searchBarView.trailingAnchor)
         ])
         
-        resultsLabel.text = "0 Results Found"
+        resultsLabel.text = "0 " + Constants.resultText
     }
 
     private func setupTableView() {
@@ -111,7 +124,7 @@ class UserListViewController: UIViewController {
     // MARK: UI Updates
     private func updateResultsLabel() {
         let rowCount = viewModel.numberOfUsers()
-        resultsLabel.text = "\(rowCount) Results Found"
+        resultsLabel.text = "\(rowCount) \(Constants.resultText)"
     }
     
     private func showErrorAlert(message: String) {
@@ -152,9 +165,8 @@ extension UserListViewController: UITableViewDelegate, UITableViewDataSource {
         tableView.deselectRow(at: indexPath, animated: true)
         
         let selectedUser = viewModel.user(at: indexPath.row)
-        
-        let userDetailsVC = UserDetailsViewController(nibName: "UserDetailsScreen", bundle: nil)
-        userDetailsVC.userId = selectedUser.id
+        let userDetailVM = UserDetailsViewModel(userId: selectedUser.id)
+        let userDetailsVC = UserDetailsViewController(viewModel: userDetailVM)
         
         navigationController?.pushViewController(userDetailsVC, animated: true)
     }

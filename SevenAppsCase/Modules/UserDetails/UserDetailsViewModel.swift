@@ -10,7 +10,9 @@ import Foundation
 class UserDetailsViewModel {
     
     // MARK: Properties
-    private let repository: UserRepositoryProtocol
+    private let repository: UserDetailRepositoryProtocol
+    private let userId: Int
+    
     var user: User?
     
     // MARK: Callbacks
@@ -19,12 +21,13 @@ class UserDetailsViewModel {
     var onEmptyState: (() -> Void)?
 
     // MARK: Initialization
-    init(repository: UserRepositoryProtocol = UserRepository()) {
+    init(repository: UserDetailRepositoryProtocol = UserDetailRepository(), userId: Int) {
         self.repository = repository
+        self.userId = userId
     }
     
     // MARK: Fetch User Details
-    func fetchUserDetails(userId: Int) {
+    func fetchUserDetails() {
         repository.getUserDetail(id: userId) { [weak self] result in
             guard let self = self else { return }
             

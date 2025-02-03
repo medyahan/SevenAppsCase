@@ -7,14 +7,15 @@
 
 import Foundation
 
-class UserListViewModel {
+// Kullanıcı listesini yöneten ViewModel (MVVM)
+final class UserListViewModel {
     
     // MARK: Properties
     private let repository: UserRepositoryProtocol
     private var users: [User] = []
     private var filteredUsers: [User] = []
     
-    // MARK: Callbacks
+    // MARK: Callbacks (UI Güncellemeleri için)
     var onDataUpdated: (() -> Void)?
     var onError: ((String) -> Void)?
     var onEmptyState: (() -> Void)?
@@ -24,7 +25,7 @@ class UserListViewModel {
         self.repository = repository
     }
     
-    // MARK: Fetch Users
+    // MARK: Fetch Users (API'den Kullanıcıları Çek)
     func fetchUsers() {
         repository.getUsers { [weak self] result in
             guard let self = self else { return }
@@ -35,22 +36,18 @@ class UserListViewModel {
                 self.filteredUsers = users
                 
                 DispatchQueue.main.async {
-                    if users.isEmpty {
-                        self.onEmptyState?() // Boş liste durumu
-                    } else {
-                        self.onDataUpdated?()
-                    }
+                    users.isEmpty ? self.onEmptyState?() : self.onDataUpdated?()
                 }
                 
             case .failure(let error):
                 DispatchQueue.main.async {
-                    self.onError?(error.localizedDescription) // Hata mesajını UI’ye ilet
+                    self.onError?(self.getErrorMessage(error))
                 }
             }
         }
     }
     
-    // MARK: Filter Users
+    // MARK: Filter Users (Arama İşlemi)
     func filterUsers(by searchText: String) {
         guard !searchText.isEmpty else {
             filteredUsers = users
@@ -64,11 +61,7 @@ class UserListViewModel {
         }
         
         DispatchQueue.main.async {
-            if self.filteredUsers.isEmpty {
-                self.onEmptyState?()
-            } else {
-                self.onDataUpdated?()
-            }
+            self.filteredUsers.isEmpty ? self.onEmptyState?() : self.onDataUpdated?()
         }
     }
     
@@ -79,5 +72,22 @@ class UserListViewModel {
     
     func user(at index: Int) -> User {
         return filteredUsers[index]
+    }
+    
+    // MARK: Private Helper Methods
+    // Network hatalarını daha anlaşılır bir mesaj haline getirir
+    private func getErrorMessage(_ error: NetworkError) -> String {
+        switch error {
+        case .invalidURL:
+            return "The requested URL is invalid."
+        case .noData:
+            return "No data received from the server."
+        case .decodingError:
+            return "Failed to process server response."
+        case .serverError(let statusCode):
+            return "Server error: \(statusCode)"
+        case .networkError(let message):
+            return "Network error: \(message)"
+        }
     }
 }

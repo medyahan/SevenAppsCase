@@ -9,11 +9,18 @@ import UIKit
 
 class UserDetailsViewController: UIViewController {
     
-    var userId: Int?
-    private let viewModel = UserDetailsViewModel()
-    
+    private let viewModel: UserDetailsViewModel
     private let scrollView = UIScrollView()
     private let contentStackView = UIStackView()
+    
+    init(viewModel: UserDetailsViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: "UserDetailsScreen", bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: Lifecycle
     override func viewDidLoad() {
@@ -22,11 +29,7 @@ class UserDetailsViewController: UIViewController {
         setupUI()
         setupBindings()
         
-        if let userId = userId {
-            viewModel.fetchUserDetails(userId: userId)
-        } else {
-            showErrorAlert(message: "Invalid User ID")
-        }
+        viewModel.fetchUserDetails()
     }
     
     // MARK: Bindings
@@ -84,10 +87,10 @@ class UserDetailsViewController: UIViewController {
         
         contentStackView.addArrangedSubview(userInfoCardView)
         contentStackView.addArrangedSubview(UserDetailCardView(title: "Address", details: [
-            "Street: \(user.address.street)",
+            "Street: \(user.address.street)", // street constanttan alınabilir
             "Suite: \(user.address.suite)",
             "City: \(user.address.city)",
-            "Zipcode: \(user.address.zipcode)"
+            "Zipcode: \(user.address.zipCode)"
         ], icon: "location"))
 
         contentStackView.addArrangedSubview(UserDetailCardView(title: "Company", details: [
@@ -108,7 +111,7 @@ class UserDetailsViewController: UIViewController {
         let emptyLabel = UILabel()
         emptyLabel.text = "No user data available"
         emptyLabel.textAlignment = .center
-        emptyLabel.textColor = .gray
+        emptyLabel.textColor = .neutral
         contentStackView.addArrangedSubview(emptyLabel)
     }
 }

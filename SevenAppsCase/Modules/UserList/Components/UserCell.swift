@@ -68,7 +68,7 @@ final class UserCell: UITableViewCell {
         [avatarImageView, nameLabel, mailLabel, arrowImageView].forEach { cardView.addSubview($0) }
     }
     
-    private func setupConstraints() {
+    private func setupConstraints() { // ayrılabilir
         cardView.translatesAutoresizingMaskIntoConstraints = false
         avatarImageView.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.translatesAutoresizingMaskIntoConstraints = false

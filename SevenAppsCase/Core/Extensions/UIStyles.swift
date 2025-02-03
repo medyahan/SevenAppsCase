@@ -1,5 +1,5 @@
 //
-//  UIExtensions.swift
+//  UIStyles.swift
 //  SevenAppsCase
 //
 //  Created by Medya Han on 3.02.2025.
@@ -49,29 +49,9 @@ extension UILabel {
         self.lineBreakMode = .byWordWrapping
         self.translatesAutoresizingMaskIntoConstraints = false
     }
-    
-    func applyAlertDescriptionStyle() {
-        self.font = UIFont(name: "Poppins-Regular", size: 12)
-        self.textColor = .neutral
-        self.textAlignment = .center
-        self.numberOfLines = 0
-        self.lineBreakMode = .byWordWrapping 
-        self.translatesAutoresizingMaskIntoConstraints = false
-    }
 }
 
 extension UIImageView {
-    
-    func loadImage(from urlString: String, placeholder: UIImage? = UIImage(systemName: "person.crop.circle")) {
-        self.image = placeholder
-        
-        ImageService.shared.loadImage(from: urlString) { image in
-            if let image = image {
-                self.image = image
-            }
-        }
-    }
-    
     func applyAvatarStyle(size: CGFloat) {
         self.contentMode = .scaleAspectFill
         self.clipsToBounds = true

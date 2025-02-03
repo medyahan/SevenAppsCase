@@ -26,8 +26,17 @@ struct Address: Decodable {
     let street: String
     let suite: String
     let city: String
-    let zipcode: String
+    let zipCode: String
     let geo: Geo
+    
+    enum CodingKeys: String, CodingKey{  // codingkey kullan diğerlerinde
+        // case street, suite, city, zipcode
+        case street = "street"
+        case suite = "suite"
+        case city = "city"
+        case zipCode = "zipcode"
+        case geo = "geo"
+    }
 }
 
 struct Geo: Decodable {
