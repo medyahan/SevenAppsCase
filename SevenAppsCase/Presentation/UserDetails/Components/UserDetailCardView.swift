@@ -7,7 +7,7 @@
 
 import UIKit
 
-class UserDetailView: UIView {
+class UserDetailCardView: UIView {
     
     private let stackView = UIStackView()
     
@@ -85,7 +85,7 @@ class UserDetailView: UIView {
         if isSubTitle {
             label.applySubTitleStyle()
         } else {
-            label.applyDetailsDescriptionStyle()
+            label.applyDescriptionStyle()
         }
         return label
     }

@@ -28,7 +28,7 @@ class CustomNavigationController: UINavigationController {
         
         appearance.titleTextAttributes = [
             NSAttributedString.Key.font: UIFont(name: "Poppins-SemiBold", size: 18) ?? UIFont.systemFont(ofSize: 18, weight: .semibold),
-            NSAttributedString.Key.foregroundColor: UIColor.secondary
+            NSAttributedString.Key.foregroundColor: UIColor.primaryDarker
         ]
         if let backImage = UIImage(named: "arrow-left") {
             appearance.setBackIndicatorImage(backImage, transitionMaskImage: backImage)
@@ -37,7 +37,7 @@ class CustomNavigationController: UINavigationController {
         self.navigationBar.standardAppearance = appearance
         self.navigationBar.scrollEdgeAppearance = appearance
         self.navigationBar.compactAppearance = appearance
-        self.navigationBar.tintColor = .secondary // Geri ikonu rengi
+        self.navigationBar.tintColor = .primaryDarker // Geri ikonu rengi
     }
     
     override func pushViewController(_ viewController: UIViewController, animated: Bool) {

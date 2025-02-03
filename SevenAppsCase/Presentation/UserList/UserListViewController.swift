@@ -22,7 +22,7 @@ class UserListViewController: UIViewController {
     private lazy var resultsLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .right
-        label.font = UIFont(name: "Poppins-Regular", size: 12) // Daha iyi okunabilirlik
+        label.font = UIFont(name: "Poppins-Regular", size: 12)
         label.textColor = .neutral
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -51,39 +51,38 @@ class UserListViewController: UIViewController {
     private func setupSearchBar() {
         view.addSubview(searchBarView)
         view.addSubview(resultsLabel)
-        
+
+        searchBarView.translatesAutoresizingMaskIntoConstraints = false
+        resultsLabel.translatesAutoresizingMaskIntoConstraints = false
+
         NSLayoutConstraint.activate([
-            searchBarView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            searchBarView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
             searchBarView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             searchBarView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            searchBarView.heightAnchor.constraint(equalToConstant: 68),
             
-            resultsLabel.topAnchor.constraint(equalTo: searchBarView.bottomAnchor, constant: 4),
+            resultsLabel.topAnchor.constraint(equalTo: searchBarView.bottomAnchor, constant: 8),
             resultsLabel.leadingAnchor.constraint(equalTo: searchBarView.leadingAnchor),
-            resultsLabel.trailingAnchor.constraint(equalTo: searchBarView.trailingAnchor),
-            resultsLabel.heightAnchor.constraint(equalToConstant: 20),
-            
-            tableView.topAnchor.constraint(equalTo: resultsLabel.bottomAnchor, constant: 8)
+            resultsLabel.trailingAnchor.constraint(equalTo: searchBarView.trailingAnchor)
         ])
         
         resultsLabel.text = "0 Results Found"
     }
-    
+
     private func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UINib(nibName: "UserCell", bundle: nil), forCellReuseIdentifier: "UserCell")
         tableView.separatorStyle = .none
         tableView.backgroundColor = .clear
-        
         tableView.translatesAutoresizingMaskIntoConstraints = false
+
         view.addSubview(tableView)
-        
+
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: resultsLabel.bottomAnchor, constant: 8),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
     
@@ -144,6 +143,8 @@ extension UserListViewController: UITableViewDelegate, UITableViewDataSource {
         
         let user = viewModel.user(at: indexPath.row)
         cell.configure(with: user)
+        
+        cell.selectionStyle = .none
         return cell
     }
     
@@ -154,7 +155,6 @@ extension UserListViewController: UITableViewDelegate, UITableViewDataSource {
         
         let userDetailsVC = UserDetailsViewController(nibName: "UserDetailsScreen", bundle: nil)
         userDetailsVC.userId = selectedUser.id
-        userDetailsVC.hidesBottomBarWhenPushed = true
         
         navigationController?.pushViewController(userDetailsVC, animated: true)
     }

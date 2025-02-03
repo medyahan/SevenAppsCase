@@ -7,16 +7,17 @@
 
 import UIKit
 
-class UserInfoView: UIView {
+class UserInfoCardView: UIView {
     
-    private lazy var profileImageView: UIImageView = {
+    private let avatarSize: CGFloat = 80
+    
+    private lazy var avatarImageView: UIImageView = {
         let imageView = UIImageView()
-        let size = 80
-        imageView.applyAvatarStyle(size: size)
+        imageView.applyAvatarStyle(size: avatarSize)
     
         NSLayoutConstraint.activate([
-            imageView.widthAnchor.constraint(equalToConstant: CGFloat(size)),
-            imageView.heightAnchor.constraint(equalToConstant: CGFloat(size))
+            imageView.widthAnchor.constraint(equalToConstant: CGFloat(avatarSize)),
+            imageView.heightAnchor.constraint(equalToConstant: CGFloat(avatarSize))
         ])
         return imageView
     }()
@@ -29,7 +30,8 @@ class UserInfoView: UIView {
     
     private lazy var usernameLabel: UILabel = {
         let label = UILabel()
-        label.applyDetailsDescriptionStyle()
+        label.applyDescriptionStyle()
+        label.textColor = .primaryDarker
         return label
     }()
     
@@ -70,7 +72,7 @@ class UserInfoView: UIView {
         nameUsernameStack.addArrangedSubview(nameLabel)
         nameUsernameStack.addArrangedSubview(usernameLabel)
         
-        profileStack.addArrangedSubview(profileImageView)
+        profileStack.addArrangedSubview(avatarImageView)
         profileStack.addArrangedSubview(nameUsernameStack)
         
         stackView.addArrangedSubview(profileStack)
@@ -94,7 +96,7 @@ class UserInfoView: UIView {
         nameLabel.text = user.name
         usernameLabel.text = "@\(user.username)"
         
-        profileImageView.loadImage(from: user.avatarURL)
+        avatarImageView.loadImage(from: user.avatarURL)
         
         emailRow.arrangedSubviews.forEach { $0.removeFromSuperview() }
         phoneRow.arrangedSubviews.forEach { $0.removeFromSuperview() }
@@ -131,7 +133,7 @@ class UserInfoView: UIView {
         
         let textLabel = UILabel()
         textLabel.text = text
-        textLabel.applyDetailsDescriptionStyle()
+        textLabel.applyDescriptionStyle()
         
         rowStack.addArrangedSubview(iconImageView)
         rowStack.addArrangedSubview(textLabel)

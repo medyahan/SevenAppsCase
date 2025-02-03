@@ -27,7 +27,7 @@ extension UIView {
 
 extension UILabel {
     func applyTitleStyle() {
-        self.font = UIFont(name: "Poppins-SemiBold", size: 16)
+        self.font = UIFont(name: "Poppins-SemiBold", size: 18)
         self.textColor = .secondary
         self.numberOfLines = 2
         self.lineBreakMode = .byTruncatingTail
@@ -42,11 +42,11 @@ extension UILabel {
         self.translatesAutoresizingMaskIntoConstraints = false
     }
     
-    func applyDetailsDescriptionStyle() {
+    func applyDescriptionStyle() {
         self.font = UIFont(name: "Poppins-Regular", size: 14)
         self.textColor = .neutral
-        self.numberOfLines = 0 // Sınırsız satır
-        self.lineBreakMode = .byWordWrapping // Kelime bazlı sarma
+        self.numberOfLines = 0
+        self.lineBreakMode = .byWordWrapping
         self.translatesAutoresizingMaskIntoConstraints = false
     }
     
@@ -54,8 +54,8 @@ extension UILabel {
         self.font = UIFont(name: "Poppins-Regular", size: 12)
         self.textColor = .neutral
         self.textAlignment = .center
-        self.numberOfLines = 0 // Sınırsız satır
-        self.lineBreakMode = .byWordWrapping // Kelime bazlı sarma
+        self.numberOfLines = 0
+        self.lineBreakMode = .byWordWrapping 
         self.translatesAutoresizingMaskIntoConstraints = false
     }
 }
@@ -72,10 +72,10 @@ extension UIImageView {
         }
     }
     
-    func applyAvatarStyle(size: Int) {
+    func applyAvatarStyle(size: CGFloat) {
         self.contentMode = .scaleAspectFill
         self.clipsToBounds = true
-        self.layer.cornerRadius = CGFloat(size / 2)
+        self.layer.cornerRadius = size / 2
         self.translatesAutoresizingMaskIntoConstraints = false
     }
 }

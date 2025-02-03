@@ -79,18 +79,18 @@ class UserDetailsViewController: UIViewController {
     private func configureContent() {
         guard let user = viewModel.user else { return }
         
-        let userInfoView = UserInfoView()
-            userInfoView.configure(with: user)
+        let userInfoCardView = UserInfoCardView()
+            userInfoCardView.configure(with: user)
         
-        contentStackView.addArrangedSubview(userInfoView)
-        contentStackView.addArrangedSubview(UserDetailView(title: "Address", details: [
+        contentStackView.addArrangedSubview(userInfoCardView)
+        contentStackView.addArrangedSubview(UserDetailCardView(title: "Address", details: [
             "Street: \(user.address.street)",
             "Suite: \(user.address.suite)",
             "City: \(user.address.city)",
             "Zipcode: \(user.address.zipcode)"
         ], icon: "location"))
 
-        contentStackView.addArrangedSubview(UserDetailView(title: "Company", details: [
+        contentStackView.addArrangedSubview(UserDetailCardView(title: "Company", details: [
             "Name: \(user.company.name)",
             "Catchphrase: \(user.company.catchPhrase)",
             "Business: \(user.company.bs)"
