@@ -9,26 +9,51 @@ import UIKit
 
 class UserDetailsViewController: UIViewController {
     
-    var user: User?
+    // MARK: - Properties
+    var userId: Int?
+    private let viewModel = UserDetailsViewModel()
     
     private let scrollView = UIScrollView()
     private let contentStackView = UIStackView()
     
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        guard user != nil else {
-            print("Hata: Kullanıcı verisi bulunamadı!")
-            return
+        setupUI()
+        setupBindings()
+        
+        if let userId = userId {
+            viewModel.fetchUserDetails(userId: userId)
+        } else {
+            showErrorAlert(message: "Invalid User ID")
+        }
+    }
+    
+    // MARK: - Bindings
+    private func setupBindings() {
+        viewModel.onUserUpdated = { [weak self] in
+            DispatchQueue.main.async {
+                self?.configureContent()
+            }
         }
         
-        self.navigationItem.title = "User Details"
-        setupUI()
-        configureContent()
+        viewModel.onError = { [weak self] errorMessage in
+            DispatchQueue.main.async {
+                self?.showErrorAlert(message: errorMessage)
+            }
+        }
+        
+        viewModel.onEmptyState = { [weak self] in
+            DispatchQueue.main.async {
+                self?.showEmptyState()
+            }
+        }
     }
     
     private func setupUI() {
         view.backgroundColor = .white
+        self.navigationItem.title = "User Details"
         
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(scrollView)
@@ -53,19 +78,11 @@ class UserDetailsViewController: UIViewController {
     }
     
     private func configureContent() {
-        guard let user = user else { return }
+        guard let user = viewModel.user else { return }
         
-        // **Profil Resmi ve Kullanıcı Bilgileri**
-        let userInfoView = createUserInfoView(user: user)
-        contentStackView.addArrangedSubview(userInfoView)
-        
-        // **Adres Bilgisi Bölümü**
-        let addressView = createAddressView(address: user.address)
-        contentStackView.addArrangedSubview(addressView)
-        
-        // **Şirket Bilgisi Bölümü**
-        let companyView = createCompanyView(company: user.company)
-        contentStackView.addArrangedSubview(companyView)
+        contentStackView.addArrangedSubview(createUserInfoView(user: user))
+        contentStackView.addArrangedSubview(createAddressView(address: user.address))
+        contentStackView.addArrangedSubview(createCompanyView(company: user.company))
     }
     
     private func createUserInfoView(user: User) -> UIView {
@@ -95,25 +112,15 @@ class UserDetailsViewController: UIViewController {
         profileImageView.applyProfileStyle()
         profileImageView.contentMode = .scaleAspectFill
         profileImageView.clipsToBounds = true
-        profileImageView.layer.cornerRadius = 40 // Yuvarlak yap
+        profileImageView.layer.cornerRadius = 40
         
         NSLayoutConstraint.activate([
             profileImageView.widthAnchor.constraint(equalToConstant: 80),
             profileImageView.heightAnchor.constraint(equalToConstant: 80)
         ])
         
-        // **Avatar Yükleme (Asenkron)**
-        if let url = URL(string: user.avatarURL) {
-            DispatchQueue.global().async {
-                if let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
-                    DispatchQueue.main.async {
-                        profileImageView.image = image
-                    }
-                }
-            }
-        } else {
-            profileImageView.image = UIImage(systemName: "person.crop.circle.fill") // Varsayılan ikon
-        }
+        // **Asenkron Avatar Yükleme**
+        profileImageView.loadImage(from: user.avatarURL)
         
         let nameUsernameStack = UIStackView()
         nameUsernameStack.axis = .vertical
@@ -125,22 +132,16 @@ class UserDetailsViewController: UIViewController {
         nameUsernameStack.addArrangedSubview(nameLabel)
         nameUsernameStack.addArrangedSubview(usernameLabel)
         
-        profileStackView.addArrangedSubview(profileImageView) // Profil Resmi Sola
-        profileStackView.addArrangedSubview(nameUsernameStack) // Ad ve Username Sağa
+        profileStackView.addArrangedSubview(profileImageView)
+        profileStackView.addArrangedSubview(nameUsernameStack)
         
         stackView.addArrangedSubview(profileStackView)
-        
-        // **Divider Ekleyelim**
         stackView.addArrangedSubview(createDivider())
         
-        // **İletişim Bilgileri (Alt Alta)**
-        let emailRow = createIconTextRow(icon: "mail", text: user.email)
-        let phoneRow = createIconTextRow(icon: "call", text: user.phone)
-        let websiteRow = createIconTextRow(icon: "discover", text: user.website)
-        
-        stackView.addArrangedSubview(emailRow)
-        stackView.addArrangedSubview(phoneRow)
-        stackView.addArrangedSubview(websiteRow)
+        // **İletişim Bilgileri**
+        stackView.addArrangedSubview(createIconTextRow(icon: "mail", text: user.email.lowercased()))
+        stackView.addArrangedSubview(createIconTextRow(icon: "call", text: user.phone))
+        stackView.addArrangedSubview(createIconTextRow(icon: "discover", text: user.website.lowercased()))
         
         return container
     }
@@ -284,5 +285,20 @@ class UserDetailsViewController: UIViewController {
             label.applyDetailsDescriptionStyle()
         }
         return label
+    }
+    
+    // MARK: - Error & Empty States
+    private func showErrorAlert(message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+    }
+    
+    private func showEmptyState() {
+        let emptyLabel = UILabel()
+        emptyLabel.text = "No user data available"
+        emptyLabel.textAlignment = .center
+        emptyLabel.textColor = .gray
+        contentStackView.addArrangedSubview(emptyLabel)
     }
 }

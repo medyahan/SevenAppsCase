@@ -118,20 +118,11 @@ class UserCell: UITableViewCell {
     
     func configure(with user: User) {
         nameLabel.text = user.name
-        mailLabel.text = user.email
+        mailLabel.text = user.email.lowercased()
         
-        if let url = URL(string: user.avatarURL) {
-            DispatchQueue.global().async {
-                if let data = try? Data(contentsOf: url) {
-                    DispatchQueue.main.async {
-                        self.profileImageView.image = UIImage(data: data)
-                        self.profileImageView.layer.cornerRadius = self.profileImageView.frame.height / 2
-                        self.profileImageView.clipsToBounds = true
-                        self.profileImageView.tintColor = .primaryDarker
-                    }
-                }
-            }
-        }
+        profileImageView.loadImage(from: user.avatarURL)
+        profileImageView.layer.cornerRadius = self.profileImageView.frame.height / 2
+        profileImageView.clipsToBounds = true
     }
     
 }

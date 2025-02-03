@@ -10,7 +10,7 @@ import Foundation
 enum Endpoint {
     case users
     case userDetail(id: Int)
-    
+
     var url: URL? {
         switch self {
         case .users:

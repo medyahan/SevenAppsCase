@@ -9,6 +9,7 @@ import UIKit
 
 class UserListViewController: UIViewController {
     
+    // MARK: - UI Elements
     @IBOutlet weak var tableView: UITableView!
     
     private lazy var searchBarView: CustomSearchBarView = {
@@ -18,26 +19,33 @@ class UserListViewController: UIViewController {
         return searchBar
     }()
     
-    private let viewModel = UserListViewModel()
-    
     private lazy var resultsLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .right
-        label.font = UIFont(name: "Poppins-Regular", size: 8)
+        label.font = UIFont(name: "Poppins-Regular", size: 12) // Daha iyi okunabilirlik
         label.textColor = .neutral
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
+    // MARK: - Properties
+    private let viewModel = UserListViewModel()
+    
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupUI()
+        setupBindings()
+        viewModel.fetchUsers() // Kullanıcıları çek
+    }
+    
+    // MARK: - Setup UI
+    private func setupUI() {
         self.navigationItem.title = "User List"
+        
         setupSearchBar()
         setupTableView()
-        setupBindings()
-        
-        viewModel.fetchUsers() // Kullanıcıları çek
     }
     
     private func setupSearchBar() {
@@ -50,15 +58,15 @@ class UserListViewController: UIViewController {
             searchBarView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             searchBarView.heightAnchor.constraint(equalToConstant: 68),
             
-            resultsLabel.topAnchor.constraint(equalTo: searchBarView.bottomAnchor, constant: 4), // Daha küçük boşluk verdik
+            resultsLabel.topAnchor.constraint(equalTo: searchBarView.bottomAnchor, constant: 4),
             resultsLabel.leadingAnchor.constraint(equalTo: searchBarView.leadingAnchor),
             resultsLabel.trailingAnchor.constraint(equalTo: searchBarView.trailingAnchor),
-            resultsLabel.heightAnchor.constraint(equalToConstant: 20), // Sabit bir yükseklik verdik
+            resultsLabel.heightAnchor.constraint(equalToConstant: 20),
             
             tableView.topAnchor.constraint(equalTo: resultsLabel.bottomAnchor, constant: 8)
         ])
         
-        resultsLabel.text = "0 Sonuç Görüntülendi" // Boş görünmemesi için başlangıç değeri
+        resultsLabel.text = "0 Results Found"
     }
     
     private func setupTableView() {
@@ -69,17 +77,17 @@ class UserListViewController: UIViewController {
         tableView.backgroundColor = .clear
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(tableView) // Eğer eklenmediyse güvenceye al
+        view.addSubview(tableView)
         
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: resultsLabel.bottomAnchor, constant: 8), // resultsLabel'ın altına konumlandır
+            tableView.topAnchor.constraint(equalTo: resultsLabel.bottomAnchor, constant: 8),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
     
-    
+    // MARK: - ViewModel Bindings
     private func setupBindings() {
         viewModel.onDataUpdated = { [weak self] in
             DispatchQueue.main.async {
@@ -87,18 +95,46 @@ class UserListViewController: UIViewController {
                 self?.tableView.reloadData()
             }
         }
+        
+        viewModel.onError = { [weak self] errorMessage in
+            DispatchQueue.main.async {
+                self?.showErrorAlert(message: errorMessage)
+            }
+        }
+        
+        viewModel.onEmptyState = { [weak self] in
+            DispatchQueue.main.async {
+                self?.showEmptyState()
+            }
+        }
     }
     
+    // MARK: - UI Updates
     private func updateResultsLabel() {
-        let rowCount = viewModel.numberOfRows()
-        resultsLabel.text = "\(rowCount) Sonuç Görüntülendi"
+        let rowCount = viewModel.numberOfUsers()
+        resultsLabel.text = "\(rowCount) Results Found"
+    }
+    
+    private func showErrorAlert(message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .default))
+        present(alert, animated: true)
+    }
+    
+    private func showEmptyState() {
+        resultsLabel.text = "No results found"
+        tableView.isHidden = true
+    }
+    
+    private func hideEmptyState() {
+        tableView.isHidden = false
     }
 }
 
 // MARK: - UITableView DataSource & Delegate
 extension UserListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.numberOfRows()
+        return viewModel.numberOfUsers()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -117,8 +153,7 @@ extension UserListViewController: UITableViewDelegate, UITableViewDataSource {
         let selectedUser = viewModel.user(at: indexPath.row)
         
         let userDetailsVC = UserDetailsViewController(nibName: "UserDetailsScreen", bundle: nil)
-        
-        userDetailsVC.user = selectedUser
+        userDetailsVC.userId = selectedUser.id
         userDetailsVC.hidesBottomBarWhenPushed = true
         
         navigationController?.pushViewController(userDetailsVC, animated: true)
@@ -128,6 +163,6 @@ extension UserListViewController: UITableViewDelegate, UITableViewDataSource {
 // MARK: - CustomSearchBarDelegate
 extension UserListViewController: CustomSearchBarDelegate {
     func didUpdateSearchText(_ text: String) {
-        viewModel.filterData(by: text)
+        viewModel.filterUsers(by: text)
     }
 }

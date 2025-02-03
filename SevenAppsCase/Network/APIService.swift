@@ -4,14 +4,13 @@
 //
 //  Created by Medya Han on 3.02.2025.
 //
-
 import Foundation
 
 class APIService {
     
-    static let shared = APIService() // Singleton
-    private init() {} // Dışarıdan örnek oluşturulmasını önler
-    
+    static let shared = APIService() // Singleton olarak kullanıyoruz
+    private init() {}
+
     func fetchData<T: Decodable>(from endpoint: Endpoint, completion: @escaping (Result<T, NetworkError>) -> Void) {
         guard let url = endpoint.url else {
             completion(.failure(.invalidURL))
@@ -20,8 +19,17 @@ class APIService {
         
         URLSession.shared.dataTask(with: url) { data, response, error in
             if let error = error {
-                print("Hata: \(error.localizedDescription)")
-                completion(.failure(.serverError(statusCode: (response as? HTTPURLResponse)?.statusCode ?? 500)))
+                completion(.failure(.unknown(error)))
+                return
+            }
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                completion(.failure(.serverError(statusCode: 500)))
+                return
+            }
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
+                completion(.failure(.serverError(statusCode: httpResponse.statusCode)))
                 return
             }
             
@@ -36,7 +44,6 @@ class APIService {
                     completion(.success(decodedData))
                 }
             } catch {
-                print("JSON Decode Error: \(error)")
                 completion(.failure(.decodingError))
             }
         }.resume()

@@ -102,6 +102,17 @@ extension UILabel {
 }
 
 extension UIImageView {
+    
+    func loadImage(from urlString: String, placeholder: UIImage? = UIImage(systemName: "person.crop.circle")) {
+        self.image = placeholder
+        
+        ImageService.shared.loadImage(from: urlString) { image in
+            if let image = image {
+                self.image = image
+            }
+        }
+    }
+    
     func applyProjectStyle() {
         self.layer.cornerRadius = 4
         self.clipsToBounds = true
