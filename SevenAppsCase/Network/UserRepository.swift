@@ -24,7 +24,6 @@ class UserRepository: UserRepositoryProtocol {
         userService.fetchUsers { result in
             switch result {
             case .success(let users):
-                // Burada cache veya database eklenebilir
                 completion(.success(users))
             case .failure(let error):
                 completion(.failure(error))
