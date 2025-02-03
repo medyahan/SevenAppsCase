@@ -9,22 +9,22 @@ import Foundation
 
 class UserListViewModel {
     
-    // MARK: - Properties
+    // MARK: Properties
     private let repository: UserRepositoryProtocol
     private var users: [User] = []
     private var filteredUsers: [User] = []
     
-    // MARK: - Callbacks
+    // MARK: Callbacks
     var onDataUpdated: (() -> Void)?
     var onError: ((String) -> Void)?
     var onEmptyState: (() -> Void)?
     
-    // MARK: - Initialization
+    // MARK: Initialization
     init(repository: UserRepositoryProtocol = UserRepository()) {
         self.repository = repository
     }
     
-    // MARK: - Fetch Users
+    // MARK: Fetch Users
     func fetchUsers() {
         repository.getUsers { [weak self] result in
             guard let self = self else { return }
@@ -50,7 +50,7 @@ class UserListViewModel {
         }
     }
     
-    // MARK: - Filter Users
+    // MARK: Filter Users
     func filterUsers(by searchText: String) {
         guard !searchText.isEmpty else {
             filteredUsers = users
@@ -72,7 +72,7 @@ class UserListViewModel {
         }
     }
     
-    // MARK: - Data Access
+    // MARK: Data Access
     func numberOfUsers() -> Int {
         return filteredUsers.count
     }

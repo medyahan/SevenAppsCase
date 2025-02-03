@@ -14,8 +14,8 @@ class CustomTextField: UITextField {
     var rightIconColor: UIColor? = .secondary
     public var borderColor: UIColor? = .neutralLight
     
-    var textColorCustom: UIColor = .secondary // Metin rengi
-    var placeholderColorCustom: UIColor = .neutralLight // Placeholder rengi
+    var textColorCustom: UIColor = .secondary
+    var placeholderColorCustom: UIColor = .neutralLight
     
     @IBInspectable var leftIcon: UIImage? {
         didSet { updateLeftView() }

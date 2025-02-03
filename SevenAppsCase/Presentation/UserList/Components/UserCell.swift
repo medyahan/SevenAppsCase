@@ -17,7 +17,7 @@ class UserCell: UITableViewCell {
     
     private lazy var profileImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.applyProfileStyle()
+        imageView.applyAvatarStyle()
         return imageView
     }()
     
@@ -85,30 +85,25 @@ class UserCell: UITableViewCell {
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            // Card View
             cardView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             cardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             cardView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             cardView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
             
-            // Profile Image
             profileImageView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 16),
             profileImageView.centerYAnchor.constraint(equalTo: cardView.centerYAnchor),
             profileImageView.widthAnchor.constraint(equalToConstant: 50),
             profileImageView.heightAnchor.constraint(equalToConstant: 50),
             
-            // Name Label
             nameLabel.leadingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: 16),
             nameLabel.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 16),
             nameLabel.trailingAnchor.constraint(equalTo: arrowImageView.leadingAnchor, constant: -8),
             
-            // Title and Skills Label
             mailLabel.leadingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: 16),
             mailLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 4),
             mailLabel.trailingAnchor.constraint(equalTo: arrowImageView.leadingAnchor, constant: -8),
             mailLabel.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -16),
             
-            // Arrow Image
             arrowImageView.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -16),
             arrowImageView.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 10),
             arrowImageView.widthAnchor.constraint(equalToConstant: 16),

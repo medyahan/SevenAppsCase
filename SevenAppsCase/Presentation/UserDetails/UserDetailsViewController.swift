@@ -9,14 +9,13 @@ import UIKit
 
 class UserDetailsViewController: UIViewController {
     
-    // MARK: - Properties
     var userId: Int?
     private let viewModel = UserDetailsViewModel()
     
     private let scrollView = UIScrollView()
     private let contentStackView = UIStackView()
     
-    // MARK: - Lifecycle
+    // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -30,7 +29,7 @@ class UserDetailsViewController: UIViewController {
         }
     }
     
-    // MARK: - Bindings
+    // MARK: Bindings
     private func setupBindings() {
         viewModel.onUserUpdated = { [weak self] in
             DispatchQueue.main.async {
@@ -102,14 +101,13 @@ class UserDetailsViewController: UIViewController {
             stackView.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -16)
         ])
         
-        // **Profil Resmi ve Kullanıcı Bilgileri (Yan Yana)**
         let profileStackView = UIStackView()
         profileStackView.axis = .horizontal
         profileStackView.spacing = 16
         profileStackView.alignment = .center
         
         let profileImageView = UIImageView()
-        profileImageView.applyProfileStyle()
+        profileImageView.applyAvatarStyle()
         profileImageView.contentMode = .scaleAspectFill
         profileImageView.clipsToBounds = true
         profileImageView.layer.cornerRadius = 40
@@ -119,7 +117,7 @@ class UserDetailsViewController: UIViewController {
             profileImageView.heightAnchor.constraint(equalToConstant: 80)
         ])
         
-        // **Asenkron Avatar Yükleme**
+        // Asenkron Avatar Yükleme
         profileImageView.loadImage(from: user.avatarURL)
         
         let nameUsernameStack = UIStackView()
@@ -138,7 +136,6 @@ class UserDetailsViewController: UIViewController {
         stackView.addArrangedSubview(profileStackView)
         stackView.addArrangedSubview(createDivider())
         
-        // **İletişim Bilgileri**
         stackView.addArrangedSubview(createIconTextRow(icon: "mail", text: user.email.lowercased()))
         stackView.addArrangedSubview(createIconTextRow(icon: "call", text: user.phone))
         stackView.addArrangedSubview(createIconTextRow(icon: "discover", text: user.website.lowercased()))
@@ -146,7 +143,6 @@ class UserDetailsViewController: UIViewController {
         return container
     }
     
-    // **📌 Adres Bilgileri Bölümü (Başlıkta İkon ve Noktalı Liste)**
     private func createAddressView(address: Address) -> UIView {
         let container = UIView()
         container.applyCardStyle()
@@ -164,7 +160,6 @@ class UserDetailsViewController: UIViewController {
             stackView.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -16)
         ])
         
-        // **Başlık + İkon**
         let titleStack = UIStackView()
         titleStack.axis = .horizontal
         titleStack.spacing = 8
@@ -185,7 +180,6 @@ class UserDetailsViewController: UIViewController {
         stackView.addArrangedSubview(titleStack)
         stackView.addArrangedSubview(createDivider())
         
-        // **Adres Bilgileri**
         stackView.addArrangedSubview(createLabel(text: "• Street: \(address.street)"))
         stackView.addArrangedSubview(createLabel(text: "• Suite: \(address.suite)"))
         stackView.addArrangedSubview(createLabel(text: "• City: \(address.city)"))
@@ -194,7 +188,6 @@ class UserDetailsViewController: UIViewController {
         return container
     }
     
-    // **📌 Şirket Bilgileri Bölümü (Başlıkta İkon ve Noktalı Liste)**
     private func createCompanyView(company: Company) -> UIView {
         let container = UIView()
         container.applyCardStyle()
@@ -212,7 +205,6 @@ class UserDetailsViewController: UIViewController {
             stackView.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -16)
         ])
         
-        // **Başlık + İkon**
         let titleStack = UIStackView()
         titleStack.axis = .horizontal
         titleStack.spacing = 8
@@ -233,7 +225,6 @@ class UserDetailsViewController: UIViewController {
         stackView.addArrangedSubview(titleStack)
         stackView.addArrangedSubview(createDivider())
         
-        // **Şirket Bilgileri**
         stackView.addArrangedSubview(createLabel(text: "• Name: \(company.name)"))
         stackView.addArrangedSubview(createLabel(text: "• Catchphrase: \(company.catchPhrase)"))
         stackView.addArrangedSubview(createLabel(text: "• Business: \(company.bs)"))

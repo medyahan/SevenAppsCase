@@ -24,15 +24,12 @@ class CustomNavigationController: UINavigationController {
     private func configureNavigationBarAppearance() {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = .white // Arka plan rengi
-        appearance.shadowColor = nil // Ayrım çizgisini kaldırıyoruz
+        appearance.backgroundColor = .white
         
-        // Başlık yazı tipi
         appearance.titleTextAttributes = [
             NSAttributedString.Key.font: UIFont(name: "Poppins-SemiBold", size: 18) ?? UIFont.systemFont(ofSize: 18, weight: .semibold),
             NSAttributedString.Key.foregroundColor: UIColor.secondary
         ]
-        // Geri ikonu
         if let backImage = UIImage(named: "arrow-left") {
             appearance.setBackIndicatorImage(backImage, transitionMaskImage: backImage)
         }

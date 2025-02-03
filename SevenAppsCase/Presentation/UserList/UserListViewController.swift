@@ -9,7 +9,7 @@ import UIKit
 
 class UserListViewController: UIViewController {
     
-    // MARK: - UI Elements
+    // MARK: UI Elements
     @IBOutlet weak var tableView: UITableView!
     
     private lazy var searchBarView: CustomSearchBarView = {
@@ -28,10 +28,10 @@ class UserListViewController: UIViewController {
         return label
     }()
     
-    // MARK: - Properties
+    // MARK: Properties
     private let viewModel = UserListViewModel()
     
-    // MARK: - Lifecycle
+    // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -40,7 +40,7 @@ class UserListViewController: UIViewController {
         viewModel.fetchUsers() // Kullanıcıları çek
     }
     
-    // MARK: - Setup UI
+    // MARK: Setup UI
     private func setupUI() {
         self.navigationItem.title = "User List"
         
@@ -87,7 +87,7 @@ class UserListViewController: UIViewController {
         ])
     }
     
-    // MARK: - ViewModel Bindings
+    // MARK: ViewModel Bindings
     private func setupBindings() {
         viewModel.onDataUpdated = { [weak self] in
             DispatchQueue.main.async {
@@ -109,7 +109,7 @@ class UserListViewController: UIViewController {
         }
     }
     
-    // MARK: - UI Updates
+    // MARK: UI Updates
     private func updateResultsLabel() {
         let rowCount = viewModel.numberOfUsers()
         resultsLabel.text = "\(rowCount) Results Found"
@@ -131,7 +131,7 @@ class UserListViewController: UIViewController {
     }
 }
 
-// MARK: - UITableView DataSource & Delegate
+// MARK: UITableView DataSource - Delegate
 extension UserListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.numberOfUsers()
@@ -160,7 +160,7 @@ extension UserListViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-// MARK: - CustomSearchBarDelegate
+// MARK: CustomSearchBarDelegate
 extension UserListViewController: CustomSearchBarDelegate {
     func didUpdateSearchText(_ text: String) {
         viewModel.filterUsers(by: text)
