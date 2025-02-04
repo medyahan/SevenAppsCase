@@ -1,11 +1,11 @@
 # **SevenAppsCase**  
 
-## ** Overview**  
+## Overview
 This project is an iOS application built using **Swift** and **UIKit**, following the **MVVM** architecture. It retrieves user data from the [JSONPlaceholder](https://jsonplaceholder.typicode.com/) API and displays a user list, with the ability to navigate to detailed user information.
 
 ---
 
-## ** Objectives**  
+## Objectives  
 - Implement **MVVM** for better separation of concerns.  
 - Fetch and display data from **JSONPlaceholder API**.  
 - Utilize **Repository Pattern** for data management.  
@@ -14,19 +14,19 @@ This project is an iOS application built using **Swift** and **UIKit**, followin
 
 ---
 
-## ** Features**  
+## Features
 
-### ** User List Screen**  
+### * User List Screen
 ✔ Fetches a list of users from JSONPlaceholder.  
 ✔ Displays user **name** and **email** in a `UITableView`.  
 ✔ Supports search functionality to filter users.  
 
-### ** User Detail Screen**  
+### * User Detail Screen
 ✔ Displays detailed information including **name, email, phone, and website**.  
 ✔ Uses a **custom UI component** for structured display.  
 ✔ Implements smooth navigation between screens.  
 
-### ** Additional Features**  
+### * Additional Features
 ✔ **Networking Layer**: Uses a structured API service to fetch data.  
 ✔ **Repository Pattern**: Centralized data management for scalability.  
 ✔ **Custom UI Components**: Reusable `UIView` components for better UI consistency.  
@@ -34,7 +34,7 @@ This project is an iOS application built using **Swift** and **UIKit**, followin
 
 ---
 
-## ** Technologies & Tools**  
+## Technologies & Tools
 - **Swift** (UIKit)  
 - **MVVM Architecture**  
 - **URLSession for Networking**  
@@ -45,7 +45,7 @@ This project is an iOS application built using **Swift** and **UIKit**, followin
 
 ---
 
-## **📸 Screenshots**  
+## Screenshots
 
 ### **Splash Screen**
 <p align="center">
