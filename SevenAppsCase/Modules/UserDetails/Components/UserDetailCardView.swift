@@ -7,7 +7,7 @@
 
 import UIKit
 
-class UserDetailCardView: UIView {
+final class UserDetailCardView: UIView { // final ekledik çünkü miras alınmayacak
     
     private let stackView = UIStackView()
     

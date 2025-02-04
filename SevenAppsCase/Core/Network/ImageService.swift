@@ -34,7 +34,7 @@ final class ImageService: ImageServiceProtocol {
             return
         }
         
-        // Aynı URL için tekrar tekrar yükleme yapmayı engelle
+        // Aynı URL için tekrar tekrar yükleme yapmayı engeller
         if let _ = cache.object(forKey: "\(urlString)-loading" as NSString) {
             return
         }
@@ -56,7 +56,7 @@ final class ImageService: ImageServiceProtocol {
                 return
             }
             
-            // Resmi önbelleğe kaydet
+            // Resmi önbelleğe kaydetme işlemi
             self.cache.setObject(image, forKey: urlString as NSString)
             
             DispatchQueue.main.async {
@@ -66,7 +66,7 @@ final class ImageService: ImageServiceProtocol {
     }
 }
 
-// Resim yükleme hatalarını yönetmek için hata türü
+// Resim yükleme hataları yönetilir
 enum ImageError: Error {
     case invalidURL
     case networkError(String)

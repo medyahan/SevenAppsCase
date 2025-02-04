@@ -7,6 +7,7 @@
 
 import UIKit
 
+// Arama çubuğundaki metin değiştiğinde bildirim sağlar
 protocol CustomSearchBarDelegate: AnyObject {
     func didUpdateSearchText(_ text: String)
 }
@@ -50,6 +51,7 @@ class CustomSearchBarView: UIView, UITextFieldDelegate {
         return CGSize(width: UIView.noIntrinsicMetric, height: searchTextField.customHeight) // Sabit yükseklik
     }
     
+    // Metin değiştiğinde çağrılan fonksiyon
     func textFieldDidChangeSelection(_ textField: UITextField) {
         delegate?.didUpdateSearchText(textField.text ?? "")
     }

@@ -10,6 +10,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SplashViewController" customModule="SevenAppsCase" customModuleProvider="target">
             <connections>
+                <outlet property="logoLabel" destination="xFK-7A-az6" id="3YI-OR-9bs"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -23,7 +24,7 @@
                     <constraints>
                         <constraint firstAttribute="height" constant="60" id="uHj-uW-XnX"/>
                     </constraints>
-                    <fontDescription key="fontDescription" name="ArialRoundedMTBold" family="Arial Rounded MT Bold" pointSize="28"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="28"/>
                     <color key="textColor" name="Secondary"/>
                     <nil key="highlightedColor"/>
                 </label>

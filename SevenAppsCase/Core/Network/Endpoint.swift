@@ -13,7 +13,7 @@ enum Endpoint {
     case users
     case userDetail(id: Int)
     
-    /// API’nin temel (base) URL adresi
+    // API’nin base URL adresi
     private var baseURL: String {
         return "https://jsonplaceholder.typicode.com"
     }
@@ -28,7 +28,7 @@ enum Endpoint {
         }
     }
     
-    // Tam URL adresini oluşturan değişken
+    // Tam URL adresini oluşturur
     var url: URL? {
         return URL(string: baseURL + path)
     }

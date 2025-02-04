@@ -8,7 +8,6 @@
 import Foundation
 
 // Ağ hatalarını yönetmek için kullanılan yapı
-
 enum NetworkError: Error {
     case invalidURL
     case noData
@@ -19,7 +18,7 @@ enum NetworkError: Error {
     var localizedDescription: String {
         switch self {
         case .invalidURL:
-            return "Invalid URL."
+            return "The requested URL is invalid."
         case .noData:
             return "No data received from the server."
         case .decodingError(let error):

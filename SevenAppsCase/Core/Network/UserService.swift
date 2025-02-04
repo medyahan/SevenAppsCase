@@ -7,25 +7,27 @@
 
 import Foundation
 
-// Kullanıcı verileri ile ilgili API çağrılarını yöneten servis.
-final class UserService {
+// Kullanıcı verileri ile ilgili API çağrılarını yöneten servis protokolü
+protocol UserServiceProtocol {
+    func fetchUsers(completion: @escaping (Result<[User], NetworkError>) -> Void)
+    func fetchUserDetail(id: Int, completion: @escaping (Result<User, NetworkError>) -> Void)
+}
+
+final class UserService: UserServiceProtocol {
     
     private let apiService: APIServiceProtocol
     
-    // UserService sınıfını belirli bir APIService ile başlatır.
-    // apiService: Kullanılacak API servisi (varsayılan: APIService.shared).
+    // API servisini dependency injection ile içeri alıyoruz
     init(apiService: APIServiceProtocol = APIService.shared) {
         self.apiService = apiService
     }
     
-    // API’den kullanıcı listesini çeker.
-    // completion: API çağrısının sonucunu döndürür ([User] veya NetworkError).
+    // API’den kullanıcı listesini çeker
     func fetchUsers(completion: @escaping (Result<[User], NetworkError>) -> Void) {
         apiService.fetchData(from: .users, completion: completion)
     }
     
-    // Belirtilen kullanıcıya ait detayları çeker.
-    // completion: API çağrısının sonucunu döndürür (User veya NetworkError).
+    // Belirtilen kullanıcıya ait detayları çeker
     func fetchUserDetail(id: Int, completion: @escaping (Result<User, NetworkError>) -> Void) {
         apiService.fetchData(from: .userDetail(id: id), completion: completion)
     }

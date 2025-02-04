@@ -9,8 +9,13 @@ import UIKit
 
 class UserListViewController: UIViewController {
     
+    // MARK: Constants
     private struct Constants {
         static let resultText = "Results Found"
+        static let emptyResultText = "No Results Found"
+        static let userCellIdentifier = "UserCell"
+        static let userListScreenNib = "UserListScreen"
+        static let navigationTitle = "User List"
     }
     
     // MARK: UI Elements
@@ -26,8 +31,8 @@ class UserListViewController: UIViewController {
     private lazy var resultsLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .right
-        label.font = UIFont(name: "Poppins-Regular", size: 12)
-        label.textColor = .neutral
+        label.font = UIStyleManager.Fonts.description.withSize(12)
+        label.textColor = UIStyleManager.Colors.neutral
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -35,9 +40,10 @@ class UserListViewController: UIViewController {
     // MARK: Properties
     private let viewModel: UserListViewModel
     
+    // MARK: Initialization
     init(viewModel: UserListViewModel) {
         self.viewModel = viewModel
-        super.init(nibName: "UserListScreen", bundle: nil)
+        super.init(nibName: Constants.userListScreenNib, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -47,16 +53,14 @@ class UserListViewController: UIViewController {
     // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupUI()
-        setupBindings()
+        setupBindings() // ViewModel ile bağlantılar kurulur
         viewModel.fetchUsers() // Kullanıcıları çek
     }
     
     // MARK: Setup UI
     private func setupUI() {
-        self.navigationItem.title = "User List"
-        
+        self.navigationItem.title = Constants.navigationTitle
         setupSearchBar()
         setupTableView()
     }
@@ -64,10 +68,10 @@ class UserListViewController: UIViewController {
     private func setupSearchBar() {
         view.addSubview(searchBarView)
         view.addSubview(resultsLabel)
-
+        
         searchBarView.translatesAutoresizingMaskIntoConstraints = false
         resultsLabel.translatesAutoresizingMaskIntoConstraints = false
-
+        
         NSLayoutConstraint.activate([
             searchBarView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
             searchBarView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
@@ -78,19 +82,19 @@ class UserListViewController: UIViewController {
             resultsLabel.trailingAnchor.constraint(equalTo: searchBarView.trailingAnchor)
         ])
         
-        resultsLabel.text = "0 " + Constants.resultText
+        resultsLabel.text = "0 \(Constants.resultText)"
     }
-
+    
     private func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(UINib(nibName: "UserCell", bundle: nil), forCellReuseIdentifier: "UserCell")
-        tableView.separatorStyle = .none
+        tableView.register(UINib(nibName: Constants.userCellIdentifier, bundle: nil), forCellReuseIdentifier: Constants.userCellIdentifier)
+        tableView.separatorStyle = .none // Satır ayırıcılar kaldırılır
         tableView.backgroundColor = .clear
         tableView.translatesAutoresizingMaskIntoConstraints = false
-
+        
         view.addSubview(tableView)
-
+        
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: resultsLabel.bottomAnchor, constant: 8),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -134,7 +138,7 @@ class UserListViewController: UIViewController {
     }
     
     private func showEmptyState() {
-        resultsLabel.text = "No results found"
+        resultsLabel.text = Constants.emptyResultText
         tableView.isHidden = true
     }
     
@@ -150,14 +154,13 @@ extension UserListViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "UserCell", for: indexPath) as? UserCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: Constants.userCellIdentifier, for: indexPath) as? UserCell else {
             return UITableViewCell()
         }
         
         let user = viewModel.user(at: indexPath.row)
         cell.configure(with: user)
-        
-        cell.selectionStyle = .none
+        cell.selectionStyle = .none // Seçim stili kaldırılır
         return cell
     }
     
@@ -165,7 +168,7 @@ extension UserListViewController: UITableViewDelegate, UITableViewDataSource {
         tableView.deselectRow(at: indexPath, animated: true)
         
         let selectedUser = viewModel.user(at: indexPath.row)
-        let userDetailVM = UserDetailsViewModel(userId: selectedUser.id)
+        let userDetailVM = UserDetailsViewModel(userId: selectedUser.id) // Kullanıcı detayları için ViewModel oluşturulur
         let userDetailsVC = UserDetailsViewController(viewModel: userDetailVM)
         
         navigationController?.pushViewController(userDetailsVC, animated: true)
@@ -175,6 +178,6 @@ extension UserListViewController: UITableViewDelegate, UITableViewDataSource {
 // MARK: CustomSearchBarDelegate
 extension UserListViewController: CustomSearchBarDelegate {
     func didUpdateSearchText(_ text: String) {
-        viewModel.filterUsers(by: text)
+        viewModel.filterUsers(by: text) // Kullanıcı filtreleme işlemi
     }
 }

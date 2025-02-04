@@ -11,7 +11,7 @@ import Foundation
 final class UserListViewModel {
     
     // MARK: Properties
-    private let repository: UserRepositoryProtocol
+    private let repository: UsersRepositoryProtocol
     private var users: [User] = []
     private var filteredUsers: [User] = []
     
@@ -21,7 +21,7 @@ final class UserListViewModel {
     var onEmptyState: (() -> Void)?
     
     // MARK: Initialization
-    init(repository: UserRepositoryProtocol = UserRepository()) {
+    init(repository: UsersRepositoryProtocol = UsersRepository()) {
         self.repository = repository
     }
     
@@ -34,15 +34,10 @@ final class UserListViewModel {
             case .success(let users):
                 self.users = users
                 self.filteredUsers = users
-                
-                DispatchQueue.main.async {
-                    users.isEmpty ? self.onEmptyState?() : self.onDataUpdated?()
-                }
+                self.handleUIUpdate(isEmpty: users.isEmpty)
                 
             case .failure(let error):
-                DispatchQueue.main.async {
-                    self.onError?(self.getErrorMessage(error))
-                }
+                self.handleError(error)
             }
         }
     }
@@ -60,9 +55,7 @@ final class UserListViewModel {
             user.username.lowercased().contains(searchText.lowercased())
         }
         
-        DispatchQueue.main.async {
-            self.filteredUsers.isEmpty ? self.onEmptyState?() : self.onDataUpdated?()
-        }
+        handleUIUpdate(isEmpty: filteredUsers.isEmpty)
     }
     
     // MARK: Data Access
@@ -74,20 +67,18 @@ final class UserListViewModel {
         return filteredUsers[index]
     }
     
-    // MARK: Private Helper Methods
-    // Network hatalarını daha anlaşılır bir mesaj haline getirir
-    private func getErrorMessage(_ error: NetworkError) -> String {
-        switch error {
-        case .invalidURL:
-            return "The requested URL is invalid."
-        case .noData:
-            return "No data received from the server."
-        case .decodingError:
-            return "Failed to process server response."
-        case .serverError(let statusCode):
-            return "Server error: \(statusCode)"
-        case .networkError(let message):
-            return "Network error: \(message)"
+    // MARK: Helper Methods
+    // Kullanıcı listesinin boş olup olmadığını kontrol ederek UI güncellemelerini kontrol eder
+    private func handleUIUpdate(isEmpty: Bool) {
+        DispatchQueue.main.async {
+            isEmpty ? self.onEmptyState?() : self.onDataUpdated?()
+        }
+    }
+    
+    // Ağa bağlı hatalarını UI'ya hata mesajı döndürür
+    private func handleError(_ error: NetworkError) {
+        DispatchQueue.main.async {
+            self.onError?(error.localizedDescription)
         }
     }
 }

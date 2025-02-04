@@ -7,7 +7,7 @@
 
 import Foundation
 
-// Repository Pattern uygulamak için kullanılan yapı
+// Kullanıcı detaylarını çekmek için Repository Pattern uygulayan yapı
 
 protocol UserDetailRepositoryProtocol {
     func getUserDetail(id: Int, completion: @escaping (Result<User, NetworkError>) -> Void)
@@ -15,20 +15,14 @@ protocol UserDetailRepositoryProtocol {
 
 class UserDetailRepository: UserDetailRepositoryProtocol {
     
-    private let userService: UserService
+    private let userService: UserServiceProtocol
     
-    init(userService: UserService = UserService()) {
+    // Dependency Injection ile dışarıdan UserServiceProtocol alıyor
+    init(userService: UserServiceProtocol = UserService()) {
         self.userService = userService
     }
     
     func getUserDetail(id: Int, completion: @escaping (Result<User, NetworkError>) -> Void) {
-        userService.fetchUserDetail(id: id) { result in
-            switch result {
-            case .success(let user):
-                completion(.success(user))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
+        userService.fetchUserDetail(id: id, completion: completion)
     }
 }

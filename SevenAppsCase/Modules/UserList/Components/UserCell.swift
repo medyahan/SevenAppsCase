@@ -38,37 +38,42 @@ final class UserCell: UITableViewCell {
     private lazy var arrowImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "arrow-right")?.withRenderingMode(.alwaysTemplate)
-        imageView.tintColor = .neutral
+        imageView.tintColor = UIStyleManager.Colors.neutral
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
     
+    // MARK: Initialize
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupViews()
-        setupConstraints()
-        self.selectionStyle = .none
+        setupUI()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        setupViews()
-        setupConstraints()
+        setupUI()
     }
     
+    // MARK: Configuration
+    // Kullanıcı bilgilerini hücreye aktarır
     func configure(with user: User) {
         nameLabel.text = user.name
         mailLabel.text = user.email.lowercased()
         avatarImageView.loadImage(from: user.avatarURL)
     }
     
-    private func setupViews() {
+    // MARK: Setup UI
+    private func setupUI() {
+        selectionStyle = .none // Hücre seçildiğinde seçim stilini engeller
         contentView.backgroundColor = .clear
+        
         contentView.addSubview(cardView)
         [avatarImageView, nameLabel, mailLabel, arrowImageView].forEach { cardView.addSubview($0) }
+        
+        setupConstraints()
     }
     
-    private func setupConstraints() { // ayrılabilir
+    private func setupConstraints() {
         cardView.translatesAutoresizingMaskIntoConstraints = false
         avatarImageView.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -102,23 +107,22 @@ final class UserCell: UITableViewCell {
         ])
     }
     
+    // MARK: - Selection Style
+    // Hücre seçildiğinde veya seçim kaldırıldığında çağrılır
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        changeContainerViewBorder(selected: selected)
+        updateCardBorder(isSelected: selected)
     }
     
+    // Hücreye basılı tutulduğunda çağrılır
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         super.setHighlighted(highlighted, animated: animated)
-        changeContainerViewBorder(selected: highlighted)
+        updateCardBorder(isSelected: highlighted)
     }
     
-    private func changeContainerViewBorder(selected: Bool) {
-        if selected {
-            cardView.layer.borderColor = UIColor.primaryDark.cgColor
-            cardView.layer.borderWidth = 2
-        } else {
-            cardView.layer.borderColor = UIColor.clear.cgColor
-            cardView.layer.borderWidth = 0
-        }
+    // Kartın border'ını günceller
+    private func updateCardBorder(isSelected: Bool) {
+        cardView.layer.borderColor = isSelected ? UIStyleManager.Colors.primaryDark.cgColor : UIColor.clear.cgColor
+        cardView.layer.borderWidth = isSelected ? 2 : 0
     }
 }

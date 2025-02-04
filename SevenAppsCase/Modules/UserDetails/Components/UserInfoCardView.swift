@@ -31,10 +31,11 @@ class UserInfoCardView: UIView {
     private lazy var usernameLabel: UILabel = {
         let label = UILabel()
         label.applyDescriptionStyle()
-        label.textColor = .primaryDarker
+        label.textColor = UIStyleManager.Colors.primaryDarker
         return label
     }()
     
+    // Kullanıcı bilgilerini gösterecek satırlar
     private let emailRow: UIStackView = UIStackView()
     private let phoneRow: UIStackView = UIStackView()
     private let websiteRow: UIStackView = UIStackView()
@@ -47,6 +48,8 @@ class UserInfoCardView: UIView {
         return stack
     }()
     
+    // MARK: Initialize
+    
     init() {
         super.init(frame: .zero)
         applyCardStyle()
@@ -58,6 +61,8 @@ class UserInfoCardView: UIView {
         applyCardStyle()
         setupUI()
     }
+    
+    // MARK: Setup UI
     
     private func setupUI() {
         let profileStack = UIStackView()
@@ -102,9 +107,9 @@ class UserInfoCardView: UIView {
         phoneRow.arrangedSubviews.forEach { $0.removeFromSuperview() }
         websiteRow.arrangedSubviews.forEach { $0.removeFromSuperview() }
         
-        emailRow.addArrangedSubview(createIconTextRow(icon: "mail", text: user.email.lowercased()))
-        phoneRow.addArrangedSubview(createIconTextRow(icon: "call", text: user.phone))
-        websiteRow.addArrangedSubview(createIconTextRow(icon: "discover", text: user.website.lowercased()))
+        emailRow.addArrangedSubview(createInfoRow(icon: "mail", text: user.email.lowercased()))
+        phoneRow.addArrangedSubview(createInfoRow(icon: "call", text: user.phone))
+        websiteRow.addArrangedSubview(createInfoRow(icon: "discover", text: user.website.lowercased()))
     }
     
     private func createDivider() -> UIView {
@@ -116,7 +121,8 @@ class UserInfoCardView: UIView {
         return divider
     }
     
-    private func createIconTextRow(icon: String, text: String) -> UIStackView {
+    // Kullanıcı bilgileri için satır oluşturur
+    private func createInfoRow(icon: String, text: String) -> UIStackView {
         let rowStack = UIStackView()
         rowStack.axis = .horizontal
         rowStack.spacing = 8
@@ -124,7 +130,7 @@ class UserInfoCardView: UIView {
         
         let iconImageView = UIImageView(image: UIImage(named: icon)?.withRenderingMode(.alwaysTemplate))
         iconImageView.contentMode = .scaleAspectFit
-        iconImageView.tintColor = .neutral
+        iconImageView.tintColor = UIStyleManager.Colors.neutral
         iconImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             iconImageView.widthAnchor.constraint(equalToConstant: 20),
