@@ -45,14 +45,23 @@ This project is an iOS application built using **Swift** and **UIKit**, followin
 
 ---
 
-## ** Installation & Setup**  
+## **📸 Screenshots**  
 
-1️⃣ **Clone the repository**  
-```sh
-git clone https://github.com/medyahan/SevenAppsCase.git
-cd SevenAppsCase
+### **Splash Screen**  
+Displays a list of users with their names and emails, including a search functionality.
+
+![Splash Screen](screenshots/splash-screen.png)
 
 ---
 
-## ** Screenshots **  
+### **User List Screen**  
+Displays a list of users with their names and emails, including a search functionality.
 
+![User List Screen](screenshots/user-list-screen.png)
+
+---
+
+### **User Details Screen**  
+Shows detailed information about the selected user including name, email, phone, and website.
+
+![User Details Screen](screenshots/user-details-screen.png)
