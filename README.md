@@ -47,21 +47,17 @@ This project is an iOS application built using **Swift** and **UIKit**, followin
 
 ## **📸 Screenshots**  
 
-### **Splash Screen**  
-Displays a list of users with their names and emails, including a search functionality.
+### **Splash Screen**
+<p align="center">
+    <img src="screenshots/splash-screen.png" alt="Splash Screen" width="200"/>
+</p>
 
-![Splash Screen](screenshots/splash-screen.png)
+### **User List Screen** 
+<p align="center">
+    <img src="screenshots/user-list-screen.png" alt="User List Screen" width="200"/>
+</p>
 
----
-
-### **User List Screen**  
-Displays a list of users with their names and emails, including a search functionality.
-
-![User List Screen](screenshots/user-list-screen.png)
-
----
-
-### **User Details Screen**  
-Shows detailed information about the selected user including name, email, phone, and website.
-
-![User Details Screen](screenshots/user-details-screen.png)
+### **User Details Screen** 
+<p align="center">
+    <img src="screenshots/user-details-screen.png" alt="User Details Screen" width="200"/>
+</p>
