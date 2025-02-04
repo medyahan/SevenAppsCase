@@ -42,19 +42,21 @@ final class UserListViewModel {
         }
     }
     
-    // MARK: Filter Users (Arama İşlemi)
+    // MARK: Filter Users (Sadece isme göre arama)
     func filterUsers(by searchText: String) {
-        guard !searchText.isEmpty else {
-            filteredUsers = users
-            onDataUpdated?()
+        let trimmedText = searchText.trimmingCharacters(in: .whitespacesAndNewlines) // Boşlukları temizle
+
+        guard !trimmedText.isEmpty else {
+            filteredUsers = users // Arama boşsa tüm kullanıcıları göster
+            handleUIUpdate(isEmpty: filteredUsers.isEmpty) // UI güncellemesi
             return
         }
-        
+
+        // Sadece isim bazlı filtreleme yap
         filteredUsers = users.filter { user in
-            user.name.lowercased().contains(searchText.lowercased()) ||
-            user.username.lowercased().contains(searchText.lowercased())
+            user.name.localizedCaseInsensitiveContains(trimmedText) // Büyük/küçük harf duyarsız arama
         }
-        
+
         handleUIUpdate(isEmpty: filteredUsers.isEmpty)
     }
     

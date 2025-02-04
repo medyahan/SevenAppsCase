@@ -107,6 +107,7 @@ class UserListViewController: UIViewController {
     private func setupBindings() {
         viewModel.onDataUpdated = { [weak self] in
             DispatchQueue.main.async {
+                self?.hideEmptyState()
                 self?.updateResultsLabel()
                 self?.tableView.reloadData()
             }
